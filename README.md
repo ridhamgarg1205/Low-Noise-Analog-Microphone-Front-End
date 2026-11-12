@@ -1,46 +1,29 @@
-# Active Notch Filter – Signal Suppression at 50 Hz
+# Noise-Reducing Analog Front-End for Microphone Circuits
 
-This subproject demonstrates an **active band-reject (notch) filter** designed to suppress a 50 Hz component from a composite input signal. The system is implemented in LTSpice using op-amp-based filter blocks and verified through FFT analysis and waveform inspection.
-
----
-
-## 🔧 Filter Design Overview
-
-- The **input** signal is a sum of **three sine waves**:
-  - `17 V / 124 Hz`
-  - `23 V / 83 Hz`
-  - `8 V / 50 Hz` *(target for suppression)*
-- These were **summed using an op-amp adder** circuit.
-- The resulting composite signal was then passed through a custom-designed **active band-reject filter**, consisting of:
-  - A **low-pass filter** and a **high-pass filter**, each implemented using op-amps to create the notch filter behaviour
-  - Their outputs were fed into another **op-amp adder** to add up the waveforms from the two filters
-- The **output gain** of the final adder stage can be fine-tuned by adjusting resistor values to prevent amplitude clipping or excessive attenuation.
+This project implements and compares **passive** and **active** analog notch filters to suppress **50 Hz power line interference** in microphone circuits—while preserving **speech intelligibility**. Designed and simulated in **LTSpice**, this front-end is achieving up to 32 dB noise attenuation. This repository includes schematics, FFT analysis, and filter comparision.
 
 ---
 
-## Files in This Folder
+## Problem Statement
 
-| File                              | Description                                                     |
-|-----------------------------------|-----------------------------------------------------------------|
-| `active_input.png`                | Time-domain waveform of the input signal                        |
-| `active_output.png`               | Time-domain waveform of the filtered output                     |
-| `active_input_and_output.png`     | Input (blue) and output (green) signals overlaid for comparison |
-| `active_input_fft.png`            | FFT of input signal (showing all 3 frequency components)        |
-| `active_output_fft.png`           | FFT of output signal (notably suppressed 50 Hz peak)            |
+Low-frequency hum (especially at **50 Hz** from AC mains) pollutes microphone signals in embedded setups. Software-based filtering adds latency and power consumption. This project aims to eliminate that noise **before ADC conversion**, using **pure analog signal conditioning**.
 
 ---
 
-## Results
+## Features
 
-- The **FFT analysis** (performed using LTSpice’s built-in FFT tool) confirms:
-  - **124 Hz** and **83 Hz** components remain intact
-  - The **50 Hz component** is **attenuated by approximately 12 dB**
-- This validates the effective band-rejection behavior of the active notch configuration, specifically tuned for 50 Hz interference.
+- **Twin-T Passive Notch Filter**: Simple, cost-effective topology  
+- **Op-Amp Based Active Notch Filter**: Combination of a low pass and high pass filter in parallel 
+- **Simulation in LTSpice** with FFT analysis and frequency response plots  
+- Preserves speech signal while suppressing low-frequency hum (~39 dB)
 
 ---
 
-## Notes
+## Components & Tools
 
-- **Color coding in overlay:**  
-  - **Blue:** Input signal  
-  - **Green:** Output signal after notch filtering  
+- **Software:** LTSpice XVII  
+- **Filters Designed:**  
+  - Passive: Twin-T notch filter  
+  - Active: Op-amp-based notch filter (based on LM741/LM324 equivalents)  
+- **Simulation Tools:** FFT, transient response, frequency sweep
+
